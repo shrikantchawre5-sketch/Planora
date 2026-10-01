@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Task Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">✓</div>
+      <div><strong>Student Task Planner</strong><span>Plan • Prioritize • Achieve</span></div>
+    </div>
+
+    <nav>
+      <button class="nav-item active" data-section="dashboard">⌂ <span>Dashboard</span></button>
+      <button class="nav-item" data-section="add">⊕ <span>Add Task</span></button>
+      <button class="nav-item" data-section="all">☷ <span>All Tasks</span></button>
+      <button class="nav-item" data-section="completed">☑ <span>Completed</span></button>
+      <button class="nav-item" data-section="settings">⚙ <span>Settings</span></button>
+    </nav>
+
+    <div class="quote">“Small steps every day<br>lead to big results.”<div class="cap">◆</div></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div></div>
+      <div class="profile">◉ <span>Student</span>⌄</div>
+    </header>
+
+    <section class="content">
+      <div class="heading">
+        <h1>Good Morning, Student!</h1>
+        <p>Here's your task planner for the day.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card hours"><span class="stat-icon">◷</span><div><small>Total Pending Hours</small><b id="pendingHours">0 h</b><em id="pendingCount">0 tasks</em></div></div>
+        <div class="stat-card overdue"><span class="stat-icon">!</span><div><small>Overdue Tasks</small><b id="overdueCount">0</b></div></div>
+        <div class="stat-card today"><span class="stat-icon">◷</span><div><small>Today's Tasks</small><b id="todayCount">0</b></div></div>
+        <div class="stat-card done"><span class="stat-icon">✓</span><div><small>Completed Tasks</small><b id="completedCount">0</b></div></div>
+      </div>
+
+      <div class="layout">
+        <div class="task-area">
+          <section class="task-section overdue-section">
+            <h2>⚠ <span>Overdue Tasks</span><i id="overdueBadge">0</i></h2>
+            <div id="overdueList"></div>
+          </section>
+
+          <section class="task-section next-section">
+            <h2>🔥 <span>Do Next (Highest Priority)</span><i id="nextBadge">0</i></h2>
+            <div id="nextList"></div>
+          </section>
+
+          <section class="task-section upcoming-section">
+            <h2>▣ <span>Upcoming Tasks</span><i id="upcomingBadge">0</i></h2>
+            <div id="upcomingList"></div>
+          </section>
+
+          <section class="task-section completed-section">
+            <h2>✓ <span>Completed Tasks</span><i id="doneBadge">0</i></h2>
+            <div id="completedList"></div>
+          </section>
+        </div>
+
+        <aside class="right-panel">
+          <section class="add-card" id="addCard">
+            <h2>⊕ &nbsp;Add New Task</h2>
+            <form id="taskForm">
+              <label>Subject</label>
+              <input id="subject" required placeholder="e.g. Database Management Systems">
+              <label>Task</label>
+              <input id="taskName" required placeholder="e.g. Assignment 2">
+              <label>Deadline</label>
+              <input id="deadline" type="date" required>
+              <div class="two-col">
+                <div><label>Estimated Hours</label><input id="hours" type="number" min="0.5" step="0.5" required placeholder="e.g. 3"></div>
+                <div><label>Priority</label><select id="priority"><option value="high">🔴 High</option><option value="medium" selected>🟡 Medium</option><option value="low">🟢 Low</option></select></div>
+              </div>
+              <label>Reminder</label>
+              <select id="reminder">
+                <option value="none">🔕 No reminder</option>
+                <option value="due">🔔 On due date — 9:00 AM</option>
+                <option value="1day">⏰ 1 day before — 9:00 AM</option>
+                <option value="2days">⏰ 2 days before — 9:00 AM</option>
+              </select>
+              <button class="add-btn" type="submit">Add Task</button>
+            </form>
+          </section>
+
+          <section class="priority-card">
+            <h2>Priority Levels</h2>
+            <div><b><span class="dot high"></span>High</b><small>Important & time sensitive</small></div>
+            <div><b><span class="dot medium"></span>Medium</b><small>Moderate importance</small></div>
+            <div><b><span class="dot low"></span>Low</b><small>Nice to have</small></div>
+            <p class="tip">💡 Tasks are sorted based on<br><strong>Deadline urgency + Priority level</strong><br>for better productivity.</p>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <button id="chatToggle" class="chat-toggle" aria-label="Open planner assistant">💬</button>
+  <section id="chatbot" class="chatbot" aria-label="Planner Assistant">
+    <div class="chat-head">
+      <div><strong>Planner Assistant</strong><small>Task-aware • works offline</small></div>
+      <button id="chatClose" aria-label="Close">×</button>
+    </div>
+    <div id="chatMessages" class="chat-messages">
+      <div class="chat-msg bot">Hi! 👋 I can check your tasks, deadlines, reminders and tell you what to do next.</div>
+    </div>
+    <div class="chat-suggestions">
+      <button data-chat="What should I do next?">Do next</button>
+      <button data-chat="Show overdue tasks">Overdue</button>
+      <button data-chat="What is due today?">Today</button>
+    </div>
+    <form id="chatForm" class="chat-form">
+      <input id="chatInput" autocomplete="off" placeholder="Ask about your tasks...">
+      <button type="submit">➤</button>
+    </form>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
